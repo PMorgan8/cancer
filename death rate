@@ -1,0 +1,88 @@
+---Cancer Data
+---By Paris Morgan
+---Group unique countries and display top 5 total stomach cancer deaths from 2019 in descending order 
+
+SELECT DISTINCT(entity) as Country, year, max(_stomach_cancer) AS Stomach_cancer_death
+FROM Cancer
+WHERE entity NOT LIKE'%(WHO)%' AND entity NOT LIKE '%(WB)' AND entity NOT LIKE 'World%' and entity NOT LIKE 'G20'
+and entity NOT LIKE 'OECD%'
+GROUP BY entity
+ORDER BY stomach_cancer_death DESC
+LIMIT 5;
+
+---Group unique countries and display top 5 total colon cancer deaths from 2019 in descending order
+
+SELECT DISTINCT(entity) as Country, year, max(_colon_and_rectum_cancer) AS Colon_and_rectum_cancer_death
+FROM Cancer
+WHERE entity NOT LIKE'%(WHO)%' AND entity NOT LIKE '%(WB)' AND entity NOT LIKE 'World%' and entity NOT LIKE 'G20'
+and entity NOT LIKE 'OECD%'
+GROUP BY entity
+ORDER BY colon_and_rectum_cancer_death DESC
+LIMIT 5;
+
+---Group unique countries and display top 5 total lung cancer deaths from 2019 in descending order
+
+SELECT DISTINCT(entity), year, max("_Tracheal,_bronchus,_and_lung_cancer") AS Lung_Cancer_Deaths
+FROM Cancer
+WHERE entity NOT LIKE'%(WHO)%' AND entity NOT LIKE '%(WB)' AND entity NOT LIKE 'World%' and entity NOT LIKE 'G20'
+and entity NOT LIKE 'OECD%'
+GROUP BY entity
+ORDER BY Lung_Cancer_Deaths DESC
+LIMIT 5;
+
+---United States lung, stomach and colon cancer deaths by year 2009-2019
+
+SELECT DISTINCT(entity) as Country, year, _colon_and_rectum_cancer as Colon_Cancer, _stomach_cancer as Stomach_Cancer, "_tracheal,_bronchus,_and_lung_cancer" as Lung_Cancer
+FROM Cancer 
+WHERE entity='United States' 
+group BY year
+ORDER BY year;
+
+---India colon lung, stomach and colon cancer deaths by year 2009-2019
+
+SELECT DISTINCT(entity) as Country, year, _colon_and_rectum_cancer as Colon_Cancer, _stomach_cancer as Stomach_Cancer, "_tracheal,_bronchus,_and_lung_cancer" as Lung_Cancer
+FROM Cancer 
+WHERE entity='India' 
+group BY year
+ORDER BY year;
+
+---China Colon lung, stomach and colon cancer deaths by year 2009-2019
+
+SELECT DISTINCT(entity) as Country, year, _colon_and_rectum_cancer as Colon_Cancer, _stomach_cancer as Stomach_Cancer, "_tracheal,_bronchus,_and_lung_cancer" as Lung_Cancer
+FROM Cancer 
+WHERE entity='China' 
+group BY year
+ORDER BY year;
+
+---Russia Colon lung, stomach and colon cancer deaths by year 2009-2019
+
+SELECT DISTINCT(entity) as Country, year, _colon_and_rectum_cancer as Colon_Cancer, _stomach_cancer as Stomach_Cancer, "_tracheal,_bronchus,_and_lung_cancer" as Lung_Cancer
+FROM Cancer 
+WHERE entity='Russia' 
+group BY year
+ORDER BY year;
+
+---China, India and United States population in 2019
+
+SELECT DISTINCT(country), "2019" AS Population
+FROM CountryPopulation
+INNER JOIN Cancer on cancer.entity=CountryPopulation.country
+where entity = 'China' OR entity = 'United States' OR entity = 'India' OR entity= 'Russia'
+
+---Country death percentage in 1990 by cancer type
+
+SELECT DISTINCT(country), year, CAST(_stomach_cancer as FLOAT)/"2019"*100 as Stomach_Cancer_Death_Percentage,
+CAST(_colon_and_rectum_cancer as float)/"2019"*100 as Colon_Cancer_Death_Percentage, CAST("_tracheal,_bronchus,_and_lung_cancer" as float)/"2019"*100 as Lung_Cancer_Death_Percentage
+FROM CountryPopulation
+INNER JOIN Cancer on cancer.entity=CountryPopulation.country
+where entity = 'China' and year = '1990' or entity = 'United States' and year = '1990'
+or entity = 'India' and year = '1990' or entity = 'Russia' and year = '1990'
+
+---Country death percentage in 2019 by cancer type
+
+SELECT DISTINCT(country), year, CAST(_stomach_cancer as FLOAT)/"2019"*100 as Stomach_Cancer_Death_Percentage,
+CAST(_colon_and_rectum_cancer as float)/"2019"*100 as Colon_Cancer_Death_Percentage, CAST("_tracheal,_bronchus,_and_lung_cancer" as float)/"2019"*100 as Lung_Cancer_Death_Percentage
+FROM CountryPopulation
+INNER JOIN Cancer on cancer.entity=CountryPopulation.country
+where entity = 'China' and year = '2019' or entity = 'United States' and year = '2019'
+or entity = 'India' and year = '2019' or entity = 'Russia' and year = '2019'
